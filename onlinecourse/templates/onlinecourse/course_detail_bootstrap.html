@@ -46,7 +46,31 @@
                 {% for lesson in course.lesson_set.all %}
                     <div class="card mt-1">
                         <div class="card-header"><h5>Lesson {{lesson.order|add:1}}: {{lesson.title}}</h5></div>
-                        <div class="card-body">{{lesson.content}}</div>
+                        <div class="card-body">{{lesson.content}}
+                        <br>
+                        {% if user.is_authenticated %}
+                        <button type="button" class="btn btn-primary" data-toggle="collapse" data-target="#exam">Start Exam</button>
+                        <div id="exam" class="collapse show">
+                            {% for question in lesson.question_set.all %}
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5>{{ question.question_text}}</h5>
+                                </div>
+                                <div id="collapseOne" class="collapse show" data-parent="#accordion">
+                                  <div class="card-body">
+                                    {% for choice in question.choice_set.all %}
+                                    <input type="check" name="choice_{{choice.id}}" id="{{choice.id}}">
+                                    {% endfor %}
+                                  </div>
+                                </div>
+                              </div>
+                              {% endfor %}
+                        </div>
+                        {% else %}
+                        <p> Sign in to access course contents</p>
+                        {% endif %}
+                        </div>
+                        
                     </div>
                 {% endfor %}
             </div>
